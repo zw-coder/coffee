@@ -1,0 +1,86 @@
+import vue from 'vue'
+import {
+  Button,
+  Tabbar,
+  TabbarItem,
+  Field,
+  Cell,
+  CellGroup,
+  Swipe,
+  SwipeItem,
+  Lazyload,
+  Col,
+  Row,
+  Icon,
+  List,
+  PasswordInput,
+  NumberKeyboard,
+  Popup,
+  Loading,
+  Skeleton,
+  Toast,
+  Tab,
+  Tabs,
+  NavBar,
+  RadioGroup,
+  Radio,
+  Stepper,
+  GoodsAction,
+  GoodsActionIcon,
+  GoodsActionButton,
+  SubmitBar,
+  Form,
+  Checkbox,
+  Search,
+  SwipeCell,
+  Dialog,
+  Tag,
+  AddressEdit,
+  Empty,
+  Uploader,
+  Notify,
+  AddressList
+} from 'vant'
+
+import 'vant/lib/index.css'
+
+vue.use(Button)
+vue.use(Tabbar)
+vue.use(TabbarItem)
+vue.use(Field)
+vue.use(Cell)
+vue.use(CellGroup)
+vue.use(Swipe)
+vue.use(SwipeItem)
+vue.use(Lazyload)
+vue.use(Col)
+vue.use(Row)
+vue.use(Icon)
+vue.use(List)
+vue.use(PasswordInput)
+vue.use(NumberKeyboard)
+vue.use(Popup)
+vue.use(Loading)
+vue.use(Skeleton)
+vue.use(Toast)
+vue.use(Tabs)
+vue.use(Tab)
+vue.use(NavBar)
+vue.use(Radio)
+vue.use(RadioGroup)
+vue.use(Stepper)
+vue.use(GoodsAction)
+vue.use(GoodsActionButton)
+vue.use(GoodsActionIcon)
+vue.use(SubmitBar)
+vue.use(Form)
+vue.use(Checkbox)
+vue.use(Search)
+vue.use(SwipeCell)
+vue.use(Dialog)
+vue.use(Tag)
+vue.use(AddressEdit)
+vue.use(Empty)
+vue.use(Uploader)
+vue.use(Notify)
+vue.use(AddressList)
