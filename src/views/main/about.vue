@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <van-uploader :after-read="afterRead" v-if="myInfo.userBg">
-      <img :src="myInfo.userBg" width="100%" />
+      <img v-lazy="myInfo.userBg" width="100%" />
     </van-uploader>
     <div class="not-img" v-else></div>
     <div class="container">
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { appkey } from "@/datas/key";
 import { FindAccountInfo, FindMyInfo ,UpdateUserBg } from "@/service/request";
 export default {
   data() {
@@ -89,7 +90,7 @@ export default {
       // console.log(res);
       if ((res.code = "H001")) {
         this.$toast.success({ message: "修改头像成功", duration: 500 });
-        this.account.userImg = res.userImg;
+        this.myInfo.userBg = res.userBg;
       }
     }
   },

@@ -454,7 +454,7 @@ function Pay(list) {
   })
 }
 
-function CommitShopcart(token,sids) {
+function CommitShopcart(token, sids) {
   return new Promise((resolve, reject) => {
     axiosGet({
       url: `/api/commitShopcart?tokenString=${token}&sids=${sids}`,
@@ -468,7 +468,7 @@ function CommitShopcart(token,sids) {
   })
 }
 
-function FindOrder(token,status){
+function FindOrder(token, status) {
   return new Promise((resolve, reject) => {
     axiosGet({
       url: `/api/findOrder?tokenString=${token}&status=${status}`,
@@ -481,6 +481,37 @@ function FindOrder(token,status){
     })
   })
 }
+
+function Receive(list) {
+  return new Promise((resolve, reject) => {
+    axiosPost({
+      url: '/api/receive',
+      data: list,
+      success(data) {
+        resolve(data)
+      },
+      error(err) {
+        reject(err)
+      }
+    })
+  })
+}
+
+function Remove(list) {
+  return new Promise((resolve, reject) => {
+    axiosPost({
+      url: '/api/removeOrder',
+      data: list,
+      success(data) {
+        resolve(data)
+      },
+      error(err) {
+        reject(err)
+      }
+    })
+  })
+}
+
 export {
   getBanner,
   getHotList,
@@ -513,5 +544,7 @@ export {
   EditAddress,
   Pay,
   CommitShopcart,
-  FindOrder
+  FindOrder,
+  Receive,
+  Remove
 }

@@ -154,7 +154,7 @@ export default {
       // console.log(a);
     },
     async onClickAdd() {
-      console.log(this.info);
+      // console.log(this.info);
       let type = [];
       this.info.rules.forEach(i => {
         i.rules.forEach(j => {
@@ -173,10 +173,15 @@ export default {
       if (res.code == 3000) {
         this.$toast.success({ duration: 500, message: "成功添加" });
         this.getBadge();
+        return res;
       }
     },
-    onClickBuy() {
-      this.$router.push({ name: "Pay" });
+    async onClickBuy() {
+      let res = await this.onClickAdd();
+      let sids = [];
+      sids.push(res.sid);
+      let a = sids.join('-')
+      this.$router.push({ name: "Pay", query: { sids: a } });
     },
     onClickShop() {
       this.$router.push("shop");

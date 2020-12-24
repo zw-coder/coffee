@@ -4,88 +4,62 @@
     <div class="container">
       <div class="bg"></div>
       <div class="content">
-        <van-tabs v-model="active" color=" #0c34ba">
-          <van-tab title="全部">
-            <div class="all">
-              <div class="order-info" v-for="(item,index) in list[0]" :key="index">
-                <div class="title">订单信息</div>
-                <van-row  type="flex" align="center">
-                  <van-col>
-                    <img :src="item.smallImg" height="70" />
-                  </van-col>
-                  <van-col offset="1" class="desc-col">
-                    <div class="desc">
-                      <div>
-                        <span class="title">{{item.name}}</span>
-                        <span class="rule">{{item.rule}}</span>
-                      </div>
-                      <div class="enname">{{item.enname}}</div>
-                      <div class="price">￥{{item.price}}</div>
+        <van-tabs v-model="active" color=" #0c34ba" class="tab-box" @change="getChange">
+          <template v-for="(item2,index2) in titles">
+            <van-tab :title="item2" :key="index2">
+              <div class="all" v-if="list[index2] && list[index2].length > 0 ">
+                <div class="order-info" v-for="(item,index) in list[index2]" :key="index">
+                  <div class="header-box">
+                    <div class="title-h">{{item.oid}}</div>
+                    <div
+                      class="remove"
+                      v-if="item.List[0].status == 1"
+                      @click="ReceiveOrder(item,index2,index)"
+                    >确认收货</div>
+                    <div class="delete" v-if="item.List[0].status == 2">
+                      已完成
+                      <van-icon class="van-icon-delete" @click="RemoveOrder(item,index2,index)"></van-icon>
                     </div>
-                  </van-col>
-                  <div class="count">X{{item.count}}</div>
-                </van-row>
-                <div class="pay-box">
-                  共计{{getCount}}件商品
-                  <span>合计￥{{getPrice}}</span>
+                  </div>
+                  <van-row
+                    type="flex"
+                    align="center"
+                    v-for="(item1,index1) in item.List"
+                    :key="index1"
+                  >
+                    <van-col>
+                      <img :src="item1.smallImg" height="70" />
+                    </van-col>
+                    <van-col offset="1" class="desc-col">
+                      <div class="desc">
+                        <div>
+                          <span class="title">{{item1.name}}</span>
+                          <span class="rule">{{item1.rule}}</span>
+                        </div>
+                        <div class="enname">{{item1.enname}}</div>
+                        <div class="price">￥{{item1.price}}</div>
+                      </div>
+                    </van-col>
+                    <div class="count">X{{item1.count}}</div>
+                  </van-row>
+                  <div class="pay-box">
+                    <div
+                      class="create-time"
+                    >{{ item.List[0].createdAt | formatDate('yyyy-MM-dd hh:mm:ss')}}</div>
+                    <div class="desc-box">
+                      <span class="count-num">共计{{item.count}}件商品</span>
+                      <span>合计￥{{item.price}}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </van-tab>
-          <van-tab title="进行中">
-            <div class="doing">
-              <div class="order-info">
-                <div class="title">订单信息</div>
-                <van-row v-for="(item,index) in list[0]" :key="index" type="flex" align="center">
-                  <van-col>
-                    <img :src="item.small_img" height="70" />
-                  </van-col>
-                  <van-col offset="1" class="desc-col">
-                    <div class="desc">
-                      <div>
-                        <span class="title">{{item.name}}</span>
-                        <span class="rule">{{item.rule}}</span>
-                      </div>
-                      <div class="enname">{{item.enname}}</div>
-                      <div class="price">￥{{item.price}}</div>
-                    </div>
-                  </van-col>
-                  <div class="count">X{{item.count}}</div>
-                </van-row>
-                <div class="pay-box">
-                  共计{{getCount}}件商品
-                  <span>合计￥{{getPrice}}</span>
-                </div>
+              <div v-else>
+                <van-empty description="订单如也,去逛一逛!">
+                  <van-button round color="#0C34BA" class="bottom-button" @click="goMenu">去逛一逛</van-button>
+                </van-empty>
               </div>
-            </div>
-          </van-tab>
-          <van-tab title="已完成">
-            <div class="finished">
-              <div class="order-info">
-                <div class="title">订单信息</div>
-                <van-row v-for="(item,index) in list[2]" :key="index" type="flex" align="center">
-                  <van-col>
-                    <img :src="item.small_img" height="70" />
-                  </van-col>
-                  <van-col offset="1" class="desc-col">
-                    <div class="desc">
-                      <div>
-                        <span class="title">{{item.name}}</span>
-                        <span class="rule">{{item.rule}}</span>
-                      </div>
-                      <div class="enname">{{item.enname}}</div>
-                      <div class="price">￥{{item.price}}</div>
-                    </div>
-                  </van-col>
-                  <div class="count">X{{item.count}}</div>
-                </van-row>
-                <div class="pay-box">
-                  共计{{getCount}}件商品
-                  <span>合计￥{{getPrice}}</span>
-                </div>
-              </div>
-            </div>
-          </van-tab>
+            </van-tab>
+          </template>
         </van-tabs>
       </div>
       <div class="item"></div>
@@ -94,13 +68,15 @@
 </template>
 
 <script>
-import { FindOrder } from "@/service/request";
+import { appkey } from "@/datas/key";
+import { FindOrder, Receive, Remove } from "@/service/request";
 export default {
   data() {
     return {
       active: 0,
       list: [],
-      status: [0, 1, 2]
+      status: [0, 1, 2],
+      titles: ["全部", "进行中", "已完成"]
     };
   },
   created() {
@@ -118,12 +94,83 @@ export default {
       for (let i = 0; i < this.status.length; i++) {
         let res = await FindOrder(token, this.status[i]);
         if (res.code == 70000) {
-          console.log(res);
-          res.result
-          this.list.push(res.result);
+          // console.log(res);
+          let dataArr = [];
+          res.result.map(mapItem => {
+            if (dataArr.length == 0) {
+              dataArr.push({ oid: mapItem.oid, List: [mapItem] });
+            } else {
+              let res = dataArr.some(item => {
+                //判断相同日期，有就添加到当前项
+                if (item.oid == mapItem.oid) {
+                  item.List.push(mapItem);
+                  return true;
+                }
+              });
+              if (!res) {
+                //如果没找相同日期添加一个新对象
+                dataArr.push({ oid: mapItem.oid, List: [mapItem] });
+              }
+            }
+          });
+          this.list.push(dataArr);
         }
       }
-      console.log(this.list);
+      this.list.forEach(item => {
+        item.forEach(item1 => {
+          let count = 0;
+          let price = 0;
+          item1.List.forEach(item2 => {
+            count += item2.count;
+            price += item2.count * item2.price;
+          });
+          item1.count = count;
+          item1.price = price;
+        });
+      });
+      this.$toast.clear();
+    },
+    async ReceiveOrder(item, index2, index) {
+      let list = {
+        appkey: appkey,
+        tokenString: this.$cookies.get("token"),
+        oid: item.oid
+      };
+      let res = await Receive(list);
+      if (res.code == "80000") {
+        this.$toast(res.msg);
+        if (this.active == 0 || this.active == 1) {
+          this.list[index2].splice(index, 1);
+          // console.log("111")
+        } else {
+          item.status = 2;
+        }
+      }
+    },
+    async RemoveOrder(item, index2, index) {
+      // console.log("1");
+      let list = {
+        appkey: appkey,
+        tokenString: this.$cookies.get("token"),
+        oid: item.oid
+      };
+      let res = await Remove(list);
+      if (res.code == "90000") {
+        this.$toast(res.msg);
+        if (this.active == 2) {
+          this.list[index2].splice(index, 1);
+          // console.log("111")
+        } else {
+          item.status = 2;
+        }
+      }
+    },
+    goMenu() {
+      this.$router.push({ name: "Menu" });
+    },
+    getChange() {
+      this.$toast.loading({ duration: 0 });
+      this.initData();
     }
   },
   computed: {
@@ -168,26 +215,61 @@ export default {
       border-top-right-radius: 10px;
       display: flex;
       flex-wrap: wrap;
-      padding-top: 5%;
-      padding-bottom: 2%;
+      .create-time {
+        color: #999;
+        font-size: 13px;
+      }
       /deep/ .van-tabs {
         width: 100%;
+        overflow: hidden;
+        /deep/ .van-tabs__nav {
+          height: 40px;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+          padding-bottom: 10px !important;
+        }
         .all,
         .doing,
         .finised {
           background-color: #f5f5f5;
-          margin-top: 20px;
+          // margin-top: 20px;
+          padding-top: 1px;
         }
         .order-info {
-          padding: 10px 0;
+          padding: 5px 0 10px;
           margin-top: 20px;
           border-radius: 14px;
           background-color: #fff;
-          .title {
-            font-size: 14px;
-            font-weight: 600;
-            text-align: left;
-            padding: 5px 0 0 10px;
+          .header-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0 5px 10px;
+            width: 100%;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            .title-h {
+              font-size: 15px;
+              font-weight: 200;
+              color: #999;
+            }
+            .remove {
+              color: #0c34ba;
+              font-weight: 600;
+              font-size: 14px;
+              width: 130px;
+            }
+            .delete {
+              color: #999;
+              font-weight: 600;
+              font-size: 14px;
+              width: 130px;
+              vertical-align: middle;
+              .van-icon {
+                font-size: 20px;
+                margin-left: 10px;
+                font-weight: 200;
+                vertical-align: top;
+              }
+            }
           }
           .van-row {
             position: relative;
@@ -227,21 +309,41 @@ export default {
               color: rgb(112, 112, 112);
             }
           }
+          // span {
+          //   color: #0c34ba;
+          // }
           .pay-box {
-            height: 40px;
+            height: 60px;
             background-color: #fff;
             border-top: 1px dashed #e4e4e4;
             position: relative;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: #444;
             display: flex;
+            flex-direction: column;
             padding: 0px 10px 0;
-            justify-content: space-between;
-            align-items: flex-end;
-            span {
-              color: #0c34ba;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 10px;
+            .create-time {
+              font-size: 14px;
+              font-weight: 200;
             }
+            .desc-box {
+              display: flex;
+              // padding: 0px 10px 0;
+              width: 100%;
+              justify-content: space-between;
+              align-items: flex-start;
+              span {
+                color: #0c34ba;
+              }
+              .count-num {
+                color: #444;
+              }
+            }
+
             &::before {
               content: "";
               position: absolute;

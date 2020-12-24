@@ -3,10 +3,9 @@
     <van-nav-bar title="我的收藏" left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="container">
       <div class="bg"></div>
-      <div class="content">
-        <div v-if="list.length > 0">
+      <div class="content" v-if="list.length > 0">
           <div class="item" v-for="item in list" :key="item.id">
-            <img :src="item.smallImg" />
+            <img :src="item.smallImg" @click.stop="goToDetail(item.pid)" />
             <span class="name">{{item.name}}</span>
             <div class="desc">
               <span class="price">￥{{item.price}}</span>
@@ -17,7 +16,6 @@
         <van-empty description="暂无收藏,去逛一逛!" v-else width="100%">
           <van-button round color="#0C34BA" class="bottom-button" @click="goMenu">去逛一逛</van-button>
         </van-empty>
-      </div>
     </div>
   </div>
 </template>
@@ -39,6 +37,9 @@ export default {
     },
     onClickLeft() {
       this.$router.go(-1);
+    },
+    goToDetail(id) {
+      this.$router.push({ path: "/detail", query: { pid: id } });
     },
     async deleteLike(pid) {
       let res = await LikeAndNotLike(false, {
@@ -85,8 +86,8 @@ export default {
       display: flex;
       flex-wrap: wrap;
       padding-top: 5%;
-      .van-empty{
-        width:100%
+      .van-empty {
+        width: 100%;
       }
       .item {
         height: 180px;

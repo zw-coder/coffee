@@ -151,6 +151,11 @@ export default {
     }
   },
   created() {
+    // this.getAddress();
+    // this.initData();
+  },
+  mounted(){
+    // this.$router.go(0) 
     this.getAddress();
     this.initData();
   },
