@@ -24,7 +24,36 @@
         :right-icon="ispassword ? 'closed-eye' : 'eye-o'"
         @click-right-icon="onprassword"
       />
-      <!-- <div class="mima">忘记密码？</div> -->
+      <div class="mima"  @click="show1 = true">忘记密码？</div>
+      <van-popup
+        v-model="show1"
+        round
+        position="bottom"
+        :style="{ height: '32%', paddingTop: '20px' }"
+      >
+        <van-form>
+          <van-field v-model="find.phone" name="手机号" label="手机号" placeholder="手机号" />
+          <van-field
+            v-model="find.password"
+            :type="isFindpassword ? 'password' : 'text'"
+            name="密码"
+            label="新密码"
+            placeholder="新密码"
+            :right-icon="isFindpassword ? 'closed-eye' : 'eye-o'"
+            @click-right-icon="onFindprassword"
+          />
+          <div style="margin: 16px">
+            <van-button
+              round
+              block
+              color="#0c34ba"
+              type="primary"
+              native-type="submit"
+              @click="Find"
+            >设置密码</van-button>
+          </div>
+        </van-form>
+      </van-popup>
       <div style="margin: 16px">
         <van-button round block type="info" color="#0c34ba" native-type="submit" @click="login">登录</van-button>
       </div>
@@ -48,7 +77,7 @@
           position="bottom"
           :style="{ height: '32%', paddingTop: '20px' }"
         >
-          <van-form @submit="onSubmit">
+          <van-form>
             <van-field v-model="userRegister.nickname" name="昵称" label="昵称" placeholder="昵称" />
             <van-field v-model="userRegister.phone" name="手机号" label="手机号" placeholder="手机号" />
             <van-field
@@ -79,7 +108,8 @@
 </template>
 
 <script>
-import { Login , Register} from "@/service/request";
+import { appkey } from "@/datas/key";
+import { Login, Register , RetrievePassword } from "@/service/request";
 export default {
   data() {
     return {
@@ -97,12 +127,21 @@ export default {
       // 查看密码眼睛
       ispassword: true,
       // 弹出面板
-      show: false
+      show: false,
+      show1: false,
+      isFindpassword: true,
+      find: {
+        password: "",
+        phone: ""
+      }
     };
   },
   methods: {
     onprassword() {
       this.ispassword = !this.ispassword;
+    },
+    onFindprassword() {
+      this.isFindpassword = !this.isFindpassword;
     },
     showPopup() {
       this.show = true;
@@ -110,11 +149,24 @@ export default {
     toHomePage() {
       this.$router.push("/home");
     },
-    onSubmit(){
+    async Find() {
+      if(!this.find.password || !this.find.phone){
+        this.$notify("手机或密码不能为空")
+        return
+      }
 
-    },
+      let res = await RetrievePassword({appkey:appkey,phone:this.find.phone,password:this.find.password})
+      this.$toast(res.msg)
+      if(res.code == 'L001'){
+        this.userLogin.phone = this.find.phone;
+        this.userLogin.password = this.find.password;
+        this.show1 = false;
+    }},
     async login() {
-      let list = { phone: this.userLogin.phone, password: this.userLogin.password };
+      let list = {
+        phone: this.userLogin.phone,
+        password: this.userLogin.password
+      };
       this.$toast.loading({
         duration: 0,
         forbidClick: true,
@@ -122,7 +174,7 @@ export default {
       });
       let res = await Login(list);
       if (res.code == 200) {
-        console.log(res)
+        // console.log(res);
         this.$toast.success({
           duration: 500,
           forbidClick: true,
@@ -139,15 +191,19 @@ export default {
         });
       }
     },
-    async register(){
-        let list = { phone: this.userRegister.phone, password: this.userRegister.password ,nickname: this.userRegister.nickname};
+    async register() {
+      let list = {
+        phone: this.userRegister.phone,
+        password: this.userRegister.password,
+        nickname: this.userRegister.nickname
+      };
       this.$toast.loading({
         duration: 0,
         forbidClick: true,
         message: "正在注册"
       });
-      let res = await  Register(list);
-      console.log(res)
+      let res = await Register(list);
+      // console.log(res);
       if (res.code == 100) {
         this.$toast.success({
           duration: 500,
@@ -195,6 +251,12 @@ export default {
   }
   .logo {
     width: 100%;
+  }
+  .mima{
+    text-align: right;
+    padding:5px 10px;
+    font-size: 14px;
+    color: #999;
   }
   .van-cell-group {
     background-color: rgb(248, 248, 248);

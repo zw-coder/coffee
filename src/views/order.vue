@@ -69,6 +69,7 @@
 
 <script>
 import { appkey } from "@/datas/key";
+import { formatDate } from '@/datas/formate'
 import { FindOrder, Receive, Remove } from "@/service/request";
 export default {
   data() {
@@ -78,6 +79,9 @@ export default {
       status: [0, 1, 2],
       titles: ["全部", "进行中", "已完成"]
     };
+  },
+  filters:{
+    formatDate
   },
   created() {
     this.initData();

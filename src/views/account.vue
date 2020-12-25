@@ -55,6 +55,9 @@ export default {
     };
   },
   mounted() {
+    // this.initData();
+  },
+  created() {
     this.initData();
   },
   methods: {
@@ -64,7 +67,7 @@ export default {
         this.$notify({ message: "您还未登陆!", duration: 1500 });
       }
       let res = await FindAccountInfo(token);
-      console.log(res);
+      // console.log(res);
       if (res.code == "B001") {
         this.account = res.result[0];
       }
@@ -85,7 +88,8 @@ export default {
         });
         if ((res.code = "C001")) {
           this.$toast.success({ message: "修改昵称成功", duration: 500 });
-          this.account = res.result[0];
+          // console.log(res)
+          this.account.nickName = res.nickName;
         }
       } else {
         let res1 = await UpdateDesc({
@@ -93,9 +97,10 @@ export default {
           appkey: appkey,
           tokenString: token
         });
-        if ((res1.code = "D001"))
+        if ((res1.code = "D001")) {
           this.$toast.success({ message: "修改简介成功", duration: 500 });
-        this.account = res1.result[0];
+          this.account.desc = res1.desc;
+        }
       }
     },
     async afterRead(file) {

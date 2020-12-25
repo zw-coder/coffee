@@ -512,6 +512,21 @@ function Remove(list) {
   })
 }
 
+function RetrievePassword(list){
+  return new Promise((resolve, reject) => {
+    axiosPost({
+      url: '/api/retrievePassword',
+      data: list,
+      success(data) {
+        resolve(data)
+      },
+      error(err) {
+        reject(err)
+      }
+    })
+  })
+}
+
 export {
   getBanner,
   getHotList,
@@ -546,5 +561,6 @@ export {
   CommitShopcart,
   FindOrder,
   Receive,
-  Remove
+  Remove,
+  RetrievePassword
 }

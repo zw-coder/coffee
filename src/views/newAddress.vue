@@ -70,12 +70,12 @@ export default {
           this.$router.push({ name: "Address" });
         }
       } else {
-        console.log(address);
+        // console.log(address);
         address.aid = this.aid;
         delete address.country;
         delete address.id;
         let res1 = await EditAddress(address);
-        console.log(res1);
+        // console.log(res1);
         if (res1.code == 30000) {
           this.$toast.success({message:res1.msg, duration: 500 });
           this.$router.push({ name: "Address" });

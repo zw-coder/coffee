@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <van-uploader :after-read="afterRead" v-if="myInfo.userBg">
-      <img v-lazy="myInfo.userBg" width="100%" />
+      <img v-lazy="myInfo.userBg" class="bg-img" width="100%" />
     </van-uploader>
     <div class="not-img" v-else></div>
     <div class="container">
@@ -109,6 +109,9 @@ export default {
   left: 0;
   right: 0;
   background-color: #f5f5f5;
+  .bg-img{
+    min-height: 200px;
+  }
   .not-img {
     height: 200px;
     width: 100%;

@@ -129,7 +129,7 @@ export default {
         tokenString: token,
         appkey: appkey
       });
-      console.log(res);
+      // console.log(res);
       if (res.code == 800) {
         this.$toast.success({
           message: res.msg,
@@ -206,7 +206,7 @@ export default {
     }
   },
   created() {
-    console.log("pid", this.pid);
+    // console.log("pid", this.pid);
     this.initData();
     this.getBadge();
     this.$nextTick(() => {

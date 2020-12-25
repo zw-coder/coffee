@@ -4,7 +4,7 @@
     <div class="content">
       <div class="address-box">
         <van-cell title="选择收获地址" is-link @click="showPopup"></van-cell>
-        <div class="item" v-if="getCheckedAddress">
+        <div class="item" v-if="address.length > 0">
           <div class="top">
             <span>{{ getCheckedAddress.name}}</span>
             <span>&nbsp;{{ getCheckedAddress.tel}}</span>
@@ -99,7 +99,7 @@ export default {
       // console.log(res)
       if (res.code == 20000) {
         this.address = res.result;
-        console.log(res);
+        // console.log(res);
         this.address.forEach(item => {
           if (item.isDefault == 1) {
             // this.checkedAddress = item;
@@ -134,7 +134,7 @@ export default {
         let res = await Pay(list);
         if (res.code == 60000) {
           this.$toast.success({ message: res.msg, duration: 500 });
-          console.log(res);
+          // console.log(res);
           this.$router.push({name:'Order'})
         }
       }

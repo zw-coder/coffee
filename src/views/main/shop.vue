@@ -106,7 +106,7 @@ export default {
       res.result.map((item, index) => {
         this.list.push(Object.assign({}, item, { checked: false }));
       });
-      console.log(this.list);
+      // console.log(this.list);
       this.count = res.result.map(v => v.count);
     },
     async onChange(count, item) {

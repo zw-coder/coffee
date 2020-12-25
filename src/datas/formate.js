@@ -1,13 +1,7 @@
-
-//全局注册过滤器, 一般用于格式化数据
-Vue.filter('formatDate', (value, format) => {
+function formatDate(value, format){
   //value: 需要格式化的数据
   //format: 指定格式 yyyy-MM-dd hh:mm:ss
-
-  // 
-
   let date = new Date(value);
-
   //获取年份
   let year = date.getFullYear();
   // 
@@ -42,6 +36,7 @@ Vue.filter('formatDate', (value, format) => {
       // 
     }
   }
-
   return format;
-})
+}
+
+export {formatDate}

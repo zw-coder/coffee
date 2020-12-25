@@ -79,7 +79,7 @@ export default {
     async changePassword() {
       if (this.oldPassword == "" || this.newPassword == "") return;
       let token = this.$cookies.get("token");
-      console.log("token", token);
+      // console.log("token", token);
       if (!token) {
         this.$notify("您还未登陆!");
         return;
