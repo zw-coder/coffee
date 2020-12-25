@@ -112,7 +112,7 @@ export default {
       res.result[0].rules = rulesData;
       this.info = res.result[0];
       this.$toast.clear();
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       let b = await FindLike(token, this.pid);
       if (b.result.length == 0) this.islike = false;
     },
@@ -123,7 +123,7 @@ export default {
       });
     },
     async onClickLike() {
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       let res = await LikeAndNotLike(!this.islike, {
         pid: this.pid,
         tokenString: token,
@@ -166,7 +166,7 @@ export default {
         pid: this.pid,
         count: this.count,
         appkey: appkey,
-        tokenString: this.$cookies.get("token"),
+        tokenString: sessionStorage.getItem("token"),
         rule: type.join("/")
       };
       let res = await AddShopCart(list);
@@ -180,14 +180,14 @@ export default {
       let res = await this.onClickAdd();
       let sids = [];
       sids.push(res.sid);
-      let a = sids.join('-')
+      let a = sids.join("-");
       this.$router.push({ name: "Pay", query: { sids: a } });
     },
     onClickShop() {
       this.$router.push("shop");
     },
     async getBadge() {
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       let res = await GetShopCartCount(token);
       if (res.code == 4000) this.badge = res.result;
     },

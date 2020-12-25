@@ -61,7 +61,7 @@ export default {
     },
     async onSave(address) {
       address.appkey = appkey;
-      address.tokenString = this.$cookies.get("token");
+      address.tokenString =  sessionStorage.getItem("token");
       address.isDefault = address.isDefault ? 1 : 0;
       if (this.title == 2) {
         let res = await AddAddress(address);
@@ -86,7 +86,7 @@ export default {
       if (this.title == 1) {
         let res = await DeleteAddress({
           appkey: appkey,
-          tokenString: this.$cookies.get("token"),
+          tokenString:  sessionStorage.getItem("token"),
           aid: this.aid
         });
         if (res.code == 10000) {
@@ -96,7 +96,7 @@ export default {
       }
     },
     async initAddress() {
-      let tokenString = this.$cookies.get("token");
+      let tokenString =  sessionStorage.getItem("token");
       if (!tokenString) {
         return this.$router.push({ name: "Login" });
       }

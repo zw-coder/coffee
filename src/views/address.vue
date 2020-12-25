@@ -44,7 +44,7 @@ export default {
       this.$router.push({ name: "NewAddress", query: { type: 2 } });
     },
     async getAddress() {
-      let res = await FindAddress(this.$cookies.get("token"));
+      let res = await FindAddress( sessionStorage.getItem("token"));
       // console.log(res)
       if (res.code == 20000) {
         this.list = res.result;

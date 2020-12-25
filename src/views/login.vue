@@ -180,7 +180,8 @@ export default {
           forbidClick: true,
           message: "登陆成功"
         });
-        this.$cookies.set("token", res.token, "1d");
+        // this.$cookies.set("token", res.token, "1d");
+        sessionStorage.setItem('token',res.token)
         this.$toast.clear();
         this.$router.push("home");
       } else {

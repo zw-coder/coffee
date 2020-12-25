@@ -4,18 +4,18 @@
     <div class="container">
       <div class="bg"></div>
       <div class="content" v-if="list.length > 0">
-          <div class="item" v-for="item in list" :key="item.id">
-            <img :src="item.smallImg" @click.stop="goToDetail(item.pid)" />
-            <span class="name">{{item.name}}</span>
-            <div class="desc">
-              <span class="price">￥{{item.price}}</span>
-              <van-icon class="van-icon-delete" @click="deleteLike(item.pid)"></van-icon>
-            </div>
+        <div class="item" v-for="item in list" :key="item.id">
+          <img :src="item.smallImg" @click.stop="goToDetail(item.pid)" />
+          <span class="name">{{item.name}}</span>
+          <div class="desc">
+            <span class="price">￥{{item.price}}</span>
+            <van-icon class="van-icon-delete" @click="deleteLike(item.pid)"></van-icon>
           </div>
         </div>
-        <van-empty description="暂无收藏,去逛一逛!" v-else width="100%">
-          <van-button round color="#0C34BA" class="bottom-button" @click="goMenu">去逛一逛</van-button>
-        </van-empty>
+      </div>
+      <van-empty description="暂无收藏,去逛一逛!" v-else width="100%">
+        <van-button round color="#0C34BA" class="bottom-button" @click="goMenu">去逛一逛</van-button>
+      </van-empty>
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     async getMyLike() {
-      let res = await FindLike(this.$cookies.get("token"));
+      let res = await FindLike(sessionStorage.getItem("token"));
       if (res.code == 2000) this.list = res.result;
     },
     onClickLeft() {
@@ -44,7 +44,7 @@ export default {
     async deleteLike(pid) {
       let res = await LikeAndNotLike(false, {
         appkey: appkey,
-        tokenString: this.$cookies.get("token"),
+        tokenString: sessionStorage.getItem("token"),
         pid: pid
       });
       if (res.code == 900) {

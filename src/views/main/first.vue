@@ -50,13 +50,13 @@ export default {
   mounted() {},
   methods: {
     async getUserInfo() {
-      let token = this.$cookies.get("token");
+      let token =  sessionStorage.getItem("token");
       if (!token) return;
       else {
         let res = await FindMyInfo(token);
         if (res.code == "A001") {
           // this.$toast.clear();
-          this.name = res.result[0].nickName+',';
+          this.name = res.result[0].nickName;
         }
       }
     },
@@ -93,13 +93,13 @@ export default {
       let date = new Date();
       let hour = date.getHours();
       if (0 < hour && hour < 11) {
-        return this.name+"早上好!";
+        return this.name+" 早上好!";
       } else if (hour > 18) {
-        return this.name+"晚上好!";
+        return this.name+" 晚上好!";
       } else if (hour > 13 && hour < 18) {
-        return this.name+"下午好!";
+        return this.name+" 下午好!";
       } else {
-        return this.name+"中午好!";
+        return this.name+" 中午好!";
       }
     }
   }

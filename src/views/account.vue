@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     async initData() {
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       if (!token) {
         this.$notify({ message: "您还未登陆!", duration: 1500 });
       }
@@ -76,7 +76,7 @@ export default {
       this.$router.push({ name: "My" });
     },
     async changeInfo(type) {
-      let token = this.$cookies.get("token");
+      let token =  sessionStorage.getItem("token");
       if (!token) {
         return;
       }
@@ -104,7 +104,7 @@ export default {
       }
     },
     async afterRead(file) {
-      let token = this.$cookies.get("token");
+      let token =  sessionStorage.getItem("token");
       if (!token) {
         return;
       }

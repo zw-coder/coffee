@@ -92,7 +92,7 @@ export default {
       this.$router.push({ name: "My" });
     },
     async initData() {
-      let token = this.$cookies.get("token");
+      let token =  sessionStorage.getItem("token");
       if (!token) return;
       this.list = [];
       for (let i = 0; i < this.status.length; i++) {
@@ -137,7 +137,7 @@ export default {
     async ReceiveOrder(item, index2, index) {
       let list = {
         appkey: appkey,
-        tokenString: this.$cookies.get("token"),
+        tokenString:  sessionStorage.getItem("token"),
         oid: item.oid
       };
       let res = await Receive(list);
@@ -155,7 +155,7 @@ export default {
       // console.log("1");
       let list = {
         appkey: appkey,
-        tokenString: this.$cookies.get("token"),
+        tokenString:  sessionStorage.getItem("token"),
         oid: item.oid
       };
       let res = await Remove(list);

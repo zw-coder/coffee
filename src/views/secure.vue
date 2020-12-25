@@ -78,7 +78,7 @@ export default {
     },
     async changePassword() {
       if (this.oldPassword == "" || this.newPassword == "") return;
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       // console.log("token", token);
       if (!token) {
         this.$notify("您还未登陆!");
@@ -108,13 +108,13 @@ export default {
       this.isOldpassword = !this.isOldpassword;
     },
     Logout() {
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       // console.log(token);
       if (!token) {
-        this.$notify({message:"您还未登陆!正在跳转登陆页",duration:800});
-        setTimeout(()=>{
-        this.$router.push({name:"Login"})
-        },1000)
+        this.$notify({ message: "您还未登陆!正在跳转登陆页", duration: 800 });
+        setTimeout(() => {
+          this.$router.push({ name: "Login" });
+        }, 1000);
       } else {
         this.$dialog
           .confirm({
@@ -124,7 +124,7 @@ export default {
           .then(() => {
             Logout({ appkey: appkey, tokenString: token }).then(res => {
               if (res.code == "F001") {
-                this.$cookies.remove("token");
+                sessionStorage.removeItem("token");
                 this.$toast.success({ message: res.msg, duration: 1000 });
                 this.$router.push({ name: "Login" });
               }
@@ -135,20 +135,34 @@ export default {
           });
       }
     },
-    async deleteAccount() {
-      let token = this.$cookies.get("token");
+    deleteAccount() {
+      let token = sessionStorage.getItem("token");
       // console.log(token);
       if (!token) {
         this.$notify("您还未登陆!");
       } else {
-        let res = await DestroyAccount({ appkey: appkey, tokenString: token });
-        if (res.code == "G001") {
-          this.$cookies.remove("token");
-          this.$toast.success({
-            message: "注销成功!请重新登陆",
-            duration: 1000
+        this.$dialog
+          .confirm({
+            title: "",
+            message: "确认注销账号吗?"
+          })
+          .then(() => {
+            let res = DestroyAccount({
+              appkey: appkey,
+              tokenString: token
+            }).then(res => {
+              if (res.code == "G001") {
+                sessionStorage.removeItem("token");
+                this.$toast.success({
+                  message: "注销成功!请重新登陆",
+                  duration: 1000
+                });
+              }
+            });
+          })
+          .catch(() => {
+            // on cancel
           });
-        }
       }
     }
   }

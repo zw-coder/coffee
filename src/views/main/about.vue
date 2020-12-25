@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async getUserInfo() {
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       if (!token) return;
       else {
         let res = await FindMyInfo(token);
@@ -49,7 +49,7 @@ export default {
       }
     },
     async afterRead(file) {
-      let token = this.$cookies.get("token");
+      let token =  sessionStorage.getItem("token");
       if (!token) {
         return;
       }

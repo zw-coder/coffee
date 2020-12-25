@@ -101,7 +101,7 @@ export default {
         });
     },
     async initData() {
-      let token = this.$cookies.get("token");
+      let token = sessionStorage.getItem("token");
       let res = await FindAllShopCart(token);
       res.result.map((item, index) => {
         this.list.push(Object.assign({}, item, { checked: false }));
@@ -112,7 +112,7 @@ export default {
     async onChange(count, item) {
       let res = await ModifyShopcartCount({
         appkey: appkey,
-        tokenString: this.$cookies.get("token"),
+        tokenString:  sessionStorage.getItem("token"),
         count: count,
         sid: item.sid
       });
@@ -136,7 +136,7 @@ export default {
               instance.close();
               RemoveShopcart({
                 appkey: appkey,
-                tokenString: this.$cookies.get("token"),
+                tokenString:  sessionStorage.getItem("token"),
                 sids: JSON.stringify([name])
               }).then(res => {
                 if (res.code == 7000) {

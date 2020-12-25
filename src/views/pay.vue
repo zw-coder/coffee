@@ -95,7 +95,7 @@ export default {
       this.show = true;
     },
     async getAddress() {
-      let res = await FindAddress(this.$cookies.get("token"));
+      let res = await FindAddress( sessionStorage.getItem("token"));
       // console.log(res)
       if (res.code == 20000) {
         this.address = res.result;
@@ -123,7 +123,7 @@ export default {
         });
         let list = {
           appkey: appkey,
-          tokenString: this.$cookies.get("token"),
+          tokenString:  sessionStorage.getItem("token"),
           sids: JSON.stringify(this.sids),
           phone: temp.tel,
           address:
@@ -141,7 +141,7 @@ export default {
     },
     async initData() {
       let res = await CommitShopcart(
-        this.$cookies.get("token"),
+        sessionStorage.getItem("token"),
         JSON.stringify(this.sids)
       );
       if (res.code == 50000) this.list = res.result;
