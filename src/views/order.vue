@@ -143,7 +143,7 @@ export default {
       let res = await Receive(list);
       if (res.code == "80000") {
         this.$toast(res.msg);
-        if (this.active == 0 || this.active == 1) {
+        if ( this.active == 1) {
           this.list[index2].splice(index, 1);
           // console.log("111")
         } else {
